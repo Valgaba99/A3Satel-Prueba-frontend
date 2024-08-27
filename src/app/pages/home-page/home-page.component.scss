@@ -1,0 +1,35 @@
+* {
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+
+}
+:host ::ng-deep.p-dropdown {
+  width: 100% !important;
+  height: 28px !important;
+}
+.p-dropdown {
+  font-size: 26px !important;
+}
+.error {
+  color: red;
+  font-size: 12px;
+}
+
+table {
+  font-family: var(--font-family);
+  font-weight: normal;
+  font-size: x-large;
+  background: var(--surface-ground);
+  color: var(--text-color);
+  padding: 1rem;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.card {
+  background: var(--surface-card);
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+}

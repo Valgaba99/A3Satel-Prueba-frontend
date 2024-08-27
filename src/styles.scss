@@ -1,0 +1,46 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/quill/dist/quill.core.css";
+@import "../node_modules/quill/dist/quill.snow.css";
+
+@font-face {
+  font-family: "Lato-regular";
+  src: url("assets/fonts/Lato-Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Lato-bold";
+  src: url("assets/fonts/Lato-Bold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Aikabon-extrabold";
+  src: url("assets/fonts/Aikabon-ExtraBold.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "Aikabon-extrabolditalic";
+  src: url("assets/fonts/Aikabon-ExtraBolditalic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "DMSansItalic";
+  src: url("assets/fonts/DMSansItalic.ttf") format("truetype");
+}
+
+@font-face {
+  font-family: "DMSansItalicbold";
+  src: url("assets/fonts/DMSansItalicbold.ttf") format("truetype");
+}
+
+* {
+  box-sizing: content-box;
+  margin: 0;
+  padding: 0;
+}
+
+h1,h2,h3,h4 {
+  font-family: 'Aikabon-extrabold' !important;
+}
+p {
+  font-family: 'Lato-regular' !important;
+}

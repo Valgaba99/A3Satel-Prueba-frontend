@@ -1,0 +1,167 @@
+<body>
+  <div class="bg-primary-200 p-3 font-bold text-gray-700">
+    <div class="flex justify-content-between flex-wrap">
+      <div
+        class="flex align-items-center justify-content-center w-4rem h-3rem bg-primary font-bold border-round m-2"
+      >
+        1
+      </div>
+      <div
+        class="flex align-items-center justify-content-center w-4rem h-3rem bg-primary font-bold border-round m-2"
+      >
+        2
+      </div>
+      <div class="flex align-items-center justify-content-center h-4rem">
+        <div class="flex justify-content-end mt-1 mr-6">
+          <p-button
+            icon="fas fa-plus"
+            label="Añadir tarea"
+            [style]="{ width: '145px', height: '45px' }"
+            (onClick)="showDialogAdd()"
+          />
+        </div>
+        <div
+          class="border-circle w-2rem h-2rem mt-2 ml-5 mr-2 flex align-items-center justify-content-center bg-blue-100"
+        >
+          <i class="fa-regular fa-user"></i>
+        </div>
+        <h3 class="mt-2 mr-2">{{ usuario }}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <p-table [value]="alltasks" [tableStyle]="{ 'min-width': '50rem' }">
+      <ng-template pTemplate="header">
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Asignada a</th>
+          <th>Estado</th>
+          <th>Descripción</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-task>
+        <tr>
+          <td>{{ task.id }}</td>
+          <td>{{ task.nombre }}</td>
+          <td>{{ task.asignadoa }}</td>
+          <td>
+            <div [innerHTML]="task.estado"></div>
+          </td>
+          <td>{{ task.descripcion }}</td>
+          <span></span>
+          <td>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="fas fa-trash"
+              (click)="deleteEmployee(task.id)"
+            ></button>
+            <button
+              type="button"
+              pButton
+              pRipple
+              icon="fas fa-pen"
+              (click)="editForm(task.id)"
+            ></button>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="summary">
+        <div
+          *ngIf="alltasks && alltasks.length === 0"
+          class="flex align-items-center justify-content-between"
+        >
+          No hay ningún registro.
+        </div>
+      </ng-template>
+      <p-toast />
+    </p-table>
+  </div>
+
+  <!-- DIALOGO PARA CREAR TAREA -->
+
+  <p-dialog
+    header="Header"
+    [(visible)]="displayDialog"
+    [style]="{ width: '60vw' }"
+  >
+    <ng-template pTemplate="header">
+      <div
+        class="m-2 p-2 w-full"
+        style="border-bottom: solid 1px rgb(94, 94, 95)"
+      >
+        <h3 class="font-bold">Crear tarea</h3>
+      </div>
+    </ng-template>
+    <form (ngSubmit)="saveTask()">
+      <div class="grid w-full h-full p-1">
+        <div class="col-12">
+          <div class="flex flex-column gap-2 p-2">
+            <label>Nombre</label>
+            <input
+              pInputText
+              ngModel
+              name="nombre"
+              required
+              [(ngModel)]="currentTask.nombre"
+              size="105"
+              style="font-size: 16px; padding: 5px"
+            />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="flex flex-column gap-2 p-2">
+            <label>Asignado a</label>
+            <p-dropdown
+              [options]="asignados"
+              name="asignadoa"
+              ngModel
+              [(ngModel)]="selectasignado"
+              optionLabel="nombre"
+              dataKey="value"
+              autoWidth="false"
+              appendTo="body"
+            />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="flex flex-column gap-2 p-2">
+            <label>Estado</label>
+            <p-dropdown
+              [options]="estados"
+              name="estado"
+              ngModel
+              [checkmark]="true"
+              optionLabel="nombre"
+              dataKey="value"
+              [(ngModel)]="selectestado"
+              [showClear]="true"
+              autoWidth="false"
+              appendTo="body"
+            />
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="flex flex-column gap-2 p-2">
+            <label>Descripción</label>
+            <p-editor
+              name="descripcion"
+              ngModel
+              [(ngModel)]="currentTask.descripcion"
+              [style]="{ height: '320px' }"
+            ></p-editor>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-content-center mb-2 mr-2 mt-2">
+        <p-button
+          type="submit"
+          label="Crear tarea"
+          styleClass="p-1 h-3rem w-12rem bg-blue-400 border-blue-400"
+        ></p-button>
+      </div>
+    </form>
+  </p-dialog>
+</body>

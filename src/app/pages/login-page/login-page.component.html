@@ -1,0 +1,169 @@
+<body>
+  <div class="flex">
+    <!-- Pantalla parte izquierda -->
+    <div class="w-6">
+      <p-image
+        src="assets/img/img_login.jpg"
+        width="98%"
+        height="98%"
+      ></p-image>
+    </div>
+    <!-- Pantalla parte derecha -->
+    <div class="w-6 mt-4 mr-4">
+      <div class="p-2 surface-card shadow-2">
+        <h1>DO-PLANNER</h1>
+        <p>Planifica y optimiza los flujos de trabajo</p>
+      </div>
+      <div class="mt-6">
+        <h2 class="text-orange-500">¡Hola, bienvenido!</h2>
+      </div>
+      <div class="flex justify-content-center mt-6">
+        <p class="text-gray-400"><b>Inicia sesión</b></p>
+      </div>
+        <div class="flex justify-content-center mt-4">
+          <input
+            type="text"
+            id="name"
+            pInputText
+            placeholder="Correo electrónico"
+          />
+        </div>
+        <div class="flex justify-content-center mt-4">
+          <input
+            type="password"
+            id="contrasena"
+            pInputText
+            placeholder="Contraseña"
+          />
+        </div>
+      <div class="flex justify-content-center mt-4">
+        <p-button
+          label="Entrar"
+          styleClass="p-2 p-button-rounded w-7rem"
+          type="submit"
+          [routerLink]="validation ? ['/home'] : ['/login']"
+        />
+      </div>
+      <div class="flex justify-content-center mt-2">
+        <p-button
+          (onClick)="showDialogRegister()"
+          label="Crear nuevo miembro"
+          icon="fa-brands fa-google"
+          styleClass="p-2 p-button-rounded border-gray-900 w-15rem bg-gray-50 text-gray-900"
+        />
+      </div>
+      <div class="flex justify-content-center mt-8">
+        <p class="text-gray-400 mr-2">Copyright © 2024 - v.0.0.1</p>
+        <p class="text-gray-600 underline">
+          Víctor Algaba
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Ventana emergente, formulario crear usuario -->
+  <p-dialog
+    header="Header"
+    [modal]="true"
+    [(visible)]="visibleDialogRegister"
+    [style]="{ width: '40rem' }"
+  >
+    <ng-template pTemplate="header">
+      <div
+        class="m-2 p-2 w-full"
+        style="border-bottom: solid 1px rgb(94, 94, 95)"
+      >
+        <h3 class="font-bold">Registrar</h3>
+        <p class="text-gray-400">Nuevo miembro</p>
+      </div>
+    </ng-template>
+    <form (ngSubmit)="submitted = true">
+      <div class="grid w-full h-full">
+        <div class="col-6">
+          <div class="flex flex-column gap-2 pt-2 pl-4">
+            <label>Nombre</label>
+            <input
+              pInputText
+              name="nombre"
+              [(ngModel)]="user.nombre"
+              required
+              minlength="4"
+            />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="flex flex-column gap-2 pt-2 ml-1">
+            <label>Apellidos</label>
+            <input
+              pInputText
+              name="apellidos"
+              [(ngModel)]="user.apellidos"
+              required
+              minlength="4"
+            />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="flex flex-column gap-2 pl-4">
+            <label>Apodo</label>
+            <input
+              pInputText
+              name="apodo"
+              [(ngModel)]="user.apodo"
+              minlength="4"
+            />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="flex flex-column gap-2 ml-1">
+            <label>Correo electrónico</label>
+            <input
+              pInputText
+              type = "email"
+              name="correoelectronico"
+              [(ngModel)]="user.correoelectronico"
+            />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="flex flex-column gap-2 pl-4">
+            <label>Puesto/Cargo</label>
+            <input
+              pInputText
+              name="puesto"
+              [(ngModel)]="user.puesto"
+              required
+              minlength="4"
+            />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="flex flex-column gap-2 ml-1">
+            <label>Rol</label>
+            <input pInputText name="rol" [(ngModel)]="user.rol" />
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="flex flex-column gap-2 pl-4">
+            <label>Contraseña</label>
+            <input pInputText type="password" name="contrasena" [(ngModel)]="user.contrasena" required minlength="10"/>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="flex flex-column gap-2 ml-1">
+            <label>Repite contraseña</label>
+            <input pInputText type="password" name="contrasenaRepeat" [(ngModel)]="user.contrasenaRepeat" required minlength="10"/>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-content-center mb-2 mr-2 mt-2">
+        <p-button
+          type="submit"
+          label="Crear usuario"
+          styleClass="p-1 h-3rem w-11rem bg-orange-500 border-orange-500"
+          (click)="createUser()"
+        />
+      </div>
+    </form>
+  </p-dialog>
+</body>
