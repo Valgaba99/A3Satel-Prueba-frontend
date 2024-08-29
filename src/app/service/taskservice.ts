@@ -27,8 +27,6 @@ export class TaskService {
     return this.http.put(`${baseUrl}/${id}`, data);
   }
 
-
-
   delete(id: number): Observable<any> {
     return this.http.delete(`${baseUrl}/${id}`);
   }

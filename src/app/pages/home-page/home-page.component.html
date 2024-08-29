@@ -45,10 +45,8 @@
           <td>{{ task.id }}</td>
           <td>{{ task.nombre }}</td>
           <td>{{ task.asignadoa }}</td>
-          <td>
-            <div [innerHTML]="task.estado"></div>
-          </td>
-          <td>{{ task.descripcion }}</td>
+          <td>{{ task.estado.nombre }}</td>
+          <td [innerHTML]="task.descripcion"></td>
           <span></span>
           <td>
             <button
@@ -56,7 +54,7 @@
               pButton
               pRipple
               icon="fas fa-trash"
-              (click)="deleteEmployee(task.id)"
+              (click)="deleteTask(task.id)"
             ></button>
             <button
               type="button"
@@ -95,14 +93,13 @@
         <h3 class="font-bold">Crear tarea</h3>
       </div>
     </ng-template>
-    <form (ngSubmit)="saveTask()">
+    <form (ngSubmit)="saveaddTask()">
       <div class="grid w-full h-full p-1">
         <div class="col-12">
           <div class="flex flex-column gap-2 p-2">
             <label>Nombre</label>
             <input
               pInputText
-              ngModel
               name="nombre"
               required
               [(ngModel)]="currentTask.nombre"
@@ -117,7 +114,6 @@
             <p-dropdown
               [options]="asignados"
               name="asignadoa"
-              ngModel
               [(ngModel)]="selectasignado"
               optionLabel="nombre"
               dataKey="value"
@@ -130,9 +126,8 @@
           <div class="flex flex-column gap-2 p-2">
             <label>Estado</label>
             <p-dropdown
-              [options]="estados"
+              [options]="state"
               name="estado"
-              ngModel
               [checkmark]="true"
               optionLabel="nombre"
               dataKey="value"
@@ -148,7 +143,6 @@
             <label>Descripción</label>
             <p-editor
               name="descripcion"
-              ngModel
               [(ngModel)]="currentTask.descripcion"
               [style]="{ height: '320px' }"
             ></p-editor>

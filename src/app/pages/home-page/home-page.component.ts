@@ -1,5 +1,6 @@
 import { Task } from './../../model/task';
 import { TaskService } from './../../service/taskservice';
+import { StatetaskService } from './../../service/statetaskservice';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm, FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 
@@ -11,14 +12,16 @@ import { EditorModule } from 'primeng/editor';
 import { TableModule } from 'primeng/table';
 import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
+import { Statetask } from '../../model/statetask';
 
 interface Asignados {
   id: number;
   nombre: string;
 }
 
-interface Estado {
-  nombre: string;
+interface State {
+  id?: number;
+  nombre?: string;
 }
 
 @Component({
@@ -36,7 +39,7 @@ interface Estado {
     DropdownModule,
     FormsModule,
   ],
-  providers: [TaskService, MessageService],
+  providers: [TaskService, StatetaskService, MessageService],
 })
 export class HomePageComponent implements OnInit {
   empForm: FormGroup | undefined;
@@ -45,21 +48,20 @@ export class HomePageComponent implements OnInit {
   usuario: string = 'Víctor Algaba Bueno';
   asignados: Asignados[] | undefined;
   selectasignado: Asignados | undefined;
-  estados: Estado[] | undefined;
-  selectestado: Estado | undefined;
+  currentstateask = new Statetask();
+  state: State[] | undefined;
+  statemodel: Statetask[] | undefined;
+  selectestado: State | undefined;
   currentTask = new Task();
   alltasks!: Task[];
   statusCode: number | undefined;
   currentIndex = -1;
   messageService: any;
 
-  constructor(private fb: FormBuilder, private taskService: TaskService) {}
+  constructor(private taskService: TaskService, private statetaskService: StatetaskService) {}
+
   ngOnInit() {
-    this.estados = [
-      { nombre: 'Pendiente' },
-      { nombre: 'En progreso' },
-      { nombre: 'Completada' },
-    ];
+    this.retrieveStatetasks()
     this.asignados = [
       { id: 1, nombre: 'Alfredo moreno lopez' },
       { id: 2, nombre: 'Emilio garcia lora' },
@@ -75,11 +77,21 @@ export class HomePageComponent implements OnInit {
     descripcion: '',
   };
 
+  // Obtener todas las tareas de la API y insertar en la tabla
   retrieveTasks(): void {
     this.taskService.getAll().subscribe({
       next: (data) => {
         this.alltasks = data;
-        console.log(data);
+      },
+      error: (e) => console.error(e),
+    });
+  }
+
+  retrieveStatetasks(): void {
+    this.statetaskService.getAll().subscribe({
+      next: (data) => {
+        this.statemodel = data;
+        this.state = this.statemodel
       },
       error: (e) => console.error(e),
     });
@@ -89,23 +101,23 @@ export class HomePageComponent implements OnInit {
     this.displayDialog = true;
   }
 
-  saveTask(): void {
+  saveaddTask(): void {
     if (!this.selectasignado || !this.selectestado) {
       console.error('Asignado a o Estado no están definidos');
       return;
     }
 
-    const data = {
+    this.currentTask = {
       nombre: this.currentTask.nombre,
-      asignadoa: this.selectasignado!.nombre,
-      estado: this.selectestado!.nombre,
+      asignadoa: this.selectasignado.nombre,
+      estado: this.selectestado.nombre,
       descripcion: this.currentTask.descripcion,
     };
+    console.log(this.currentTask);
 
-    this.taskService.update(id,data).subscribe({
+    this.taskService.create(this.currentTask).subscribe({
       next: (res) => {
         console.log(res);
-        console.log(data);
         this.displayDialog = false;
         this.submitted = true;
         this.resetTask();
@@ -117,7 +129,7 @@ export class HomePageComponent implements OnInit {
     });
   }
 
-  deleteEmployee(id: number) {
+  deleteTask(id: number) {
     this.taskService.delete(id).subscribe({
       next: (res) => {
         console.log(res);
@@ -126,7 +138,7 @@ export class HomePageComponent implements OnInit {
           summary: 'Success',
           detail: 'Tarea borrada correctamente',
         });
-        this.retrieveTasks();
+        //this.alltasks = this.alltasks.filter(task => task.id !== id)
       },
       error: (e) => {
         console.error(e);
@@ -161,16 +173,17 @@ export class HomePageComponent implements OnInit {
     this.currentTask = {
       nombre: selecttaks!.nombre,
       asignadoa: selecttaks!.asignadoa,
-      estado: selecttaks!.estado![0],
+      estado: selecttaks!.estado!,
       descripcion: selecttaks!.descripcion,
     };
   }
+
   resetTask(): void {
     this.submitted = false;
     this.currentTask = {
       nombre: '',
-      asignadoa: ' ',
-      estado: ' ',
+      asignadoa: '',
+      estado: '',
       descripcion: '',
     };
   }
