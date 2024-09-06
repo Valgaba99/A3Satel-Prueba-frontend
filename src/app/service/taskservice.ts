@@ -15,7 +15,7 @@ export class TaskService {
     return this.http.get<Task[]>(baseUrl);
   }
 
-  get(id: any): Observable<Task> {
+  get(id: number): Observable<Task> {
     return this.http.get<Task>(`${baseUrl}/${id}`);
   }
 
@@ -24,7 +24,7 @@ export class TaskService {
   }
 
   update(id: number, data: Task): Observable<any> {
-    return this.http.put(`${baseUrl}/${id}`, data);
+    return this.http.patch(`${baseUrl}/${id}`, data);
   }
 
   delete(id: number): Observable<any> {

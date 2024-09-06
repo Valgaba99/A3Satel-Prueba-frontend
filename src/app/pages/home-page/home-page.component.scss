@@ -17,6 +17,7 @@
 }
 
 table {
+  width: 100%;
   font-family: var(--font-family);
   font-weight: normal;
   font-size: x-large;
@@ -27,9 +28,21 @@ table {
   -moz-osx-font-smoothing: grayscale;
 }
 
+td {
+  width: 17%;
+  height: 17%;
+  padding: 1px; /* Ajusta el padding según tus necesidades */
+  margin: 1px;
+  border: 0.2px solid #ddd; /* Añade un borde para mejor visualización */
+  text-align: center; /* Centra el texto */
+}
+
+th {
+  background-color: #afc8f7; /* Color de fondo para los encabezados */
+  padding: 5px; /* Padding para los encabezados */
+  border: 0.2px solid #ddd;
+  text-align: center;
+}
 .card {
-  background: var(--surface-card);
-  padding: 2rem;
-  border-radius: 10px;
-  margin-bottom: 1rem;
+  padding: 1rem;
 }

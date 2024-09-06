@@ -17,7 +17,7 @@
             icon="fas fa-plus"
             label="Añadir tarea"
             [style]="{ width: '145px', height: '45px' }"
-            (onClick)="showDialogAdd()"
+            (onClick)="dialogTask()"
           />
         </div>
         <div
@@ -30,7 +30,7 @@
     </div>
   </div>
   <div class="card">
-    <p-table [value]="alltasks" [tableStyle]="{ 'min-width': '50rem' }">
+    <p-table [value]="alltasks">
       <ng-template pTemplate="header">
         <tr>
           <th>ID</th>
@@ -38,6 +38,7 @@
           <th>Asignada a</th>
           <th>Estado</th>
           <th>Descripción</th>
+          <th></th>
         </tr>
       </ng-template>
       <ng-template pTemplate="body" let-task>
@@ -47,7 +48,6 @@
           <td>{{ task.asignadoa }}</td>
           <td>{{ task.estado.nombre }}</td>
           <td [innerHTML]="task.descripcion"></td>
-          <span></span>
           <td>
             <button
               type="button"
@@ -61,7 +61,7 @@
               pButton
               pRipple
               icon="fas fa-pen"
-              (click)="editForm(task.id)"
+              (click)="loadForm(task.id)"
             ></button>
           </td>
         </tr>
@@ -82,6 +82,7 @@
 
   <p-dialog
     header="Header"
+    (onHide)="resetTask()"
     [(visible)]="displayDialog"
     [style]="{ width: '60vw' }"
   >
@@ -93,7 +94,7 @@
         <h3 class="font-bold">Crear tarea</h3>
       </div>
     </ng-template>
-    <form (ngSubmit)="saveaddTask()">
+    <form (ngSubmit)="onSubmit()">
       <div class="grid w-full h-full p-1">
         <div class="col-12">
           <div class="flex flex-column gap-2 p-2">
@@ -113,8 +114,9 @@
             <label>Asignado a</label>
             <p-dropdown
               [options]="asignados"
-              name="asignadoa"
+              name="selectasignado"
               [(ngModel)]="selectasignado"
+              (onChange)="($event)"
               optionLabel="nombre"
               dataKey="value"
               autoWidth="false"
@@ -126,16 +128,17 @@
           <div class="flex flex-column gap-2 p-2">
             <label>Estado</label>
             <p-dropdown
-              [options]="state"
+              [options]="estados"
               name="estado"
               [checkmark]="true"
               optionLabel="nombre"
-              dataKey="value"
+              dataKey="nombre"
+              (onChange)="($event)"
               [(ngModel)]="selectestado"
               [showClear]="true"
               autoWidth="false"
               appendTo="body"
-            />
+            ></p-dropdown>
           </div>
         </div>
         <div class="col-12">
