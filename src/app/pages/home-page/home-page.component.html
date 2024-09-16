@@ -3,20 +3,19 @@
     <div class="flex justify-content-between flex-wrap">
       <div
         class="flex align-items-center justify-content-center w-4rem h-3rem bg-primary font-bold border-round m-2"
-      >
-        1
-      </div>
+      ></div>
       <div
         class="flex align-items-center justify-content-center w-4rem h-3rem bg-primary font-bold border-round m-2"
       >
         2
       </div>
-      <div class="flex align-items-center justify-content-center h-4rem">
-        <div class="flex justify-content-end mt-1 mr-6">
+      <div class="flex align-items-center h-4rem">
+        <div class="flex mt-1 mr-6">
+          <!-- [style]="{ width: '145px', height: '45px'}" -->
           <p-button
-            icon="fas fa-plus"
+            icon="fas fa-plus ml-2"
             label="Añadir tarea"
-            [style]="{ width: '145px', height: '45px' }"
+            styleClass="p-1 h-2rem w-9rem bg-blue-400 border-blue-400"
             (onClick)="dialogTask()"
           />
         </div>
@@ -49,20 +48,22 @@
           <td>{{ task.estado.nombre }}</td>
           <td [innerHTML]="task.descripcion"></td>
           <td>
-            <button
-              type="button"
-              pButton
-              pRipple
-              icon="fas fa-trash"
-              (click)="deleteTask(task.id)"
-            ></button>
-            <button
-              type="button"
-              pButton
-              pRipple
-              icon="fas fa-pen"
-              (click)="loadForm(task.id)"
-            ></button>
+            <div class="button-container">
+              <p-button
+                type="button"
+                pButton
+                pRipple
+                icon="fas fa-trash"
+                (click)="deleteTask(task.id)"
+              ></p-button>
+              <p-button
+                type="button"
+                pButton
+                pRipple
+                icon="fas fa-pen"
+                (click)="loadForm(task.id)"
+              ></p-button>
+            </div>
           </td>
         </tr>
       </ng-template>
@@ -95,17 +96,17 @@
       </div>
     </ng-template>
     <form (ngSubmit)="onSubmit()">
-      <div class="grid w-full h-full p-1">
+      <div class="grid w-full h-full">
         <div class="col-12">
-          <div class="flex flex-column gap-2 p-2">
+          <div class="flex flex-column gap-2 p-2 mr-1">
             <label>Nombre</label>
             <input
               pInputText
               name="nombre"
+              type="text"
               required
               [(ngModel)]="currentTask.nombre"
-              size="105"
-              style="font-size: 16px; padding: 5px"
+              style="padding: 7px"
             />
           </div>
         </div>
@@ -113,8 +114,11 @@
           <div class="flex flex-column gap-2 p-2">
             <label>Asignado a</label>
             <p-dropdown
+              #dropdownasignado
+              id="dropdownasignado"
               [options]="asignados"
               name="selectasignado"
+              [checkmark]="true"
               [(ngModel)]="selectasignado"
               (onChange)="($event)"
               optionLabel="nombre"
@@ -128,6 +132,7 @@
           <div class="flex flex-column gap-2 p-2">
             <label>Estado</label>
             <p-dropdown
+              id="dropdownestado"
               [options]="estados"
               name="estado"
               [checkmark]="true"
@@ -147,7 +152,7 @@
             <p-editor
               name="descripcion"
               [(ngModel)]="currentTask.descripcion"
-              [style]="{ height: '320px' }"
+              [style]="{ height: '257px' }"
             ></p-editor>
           </div>
         </div>

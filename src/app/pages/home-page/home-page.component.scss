@@ -2,18 +2,10 @@
   overflow: hidden;
   margin: 0;
   padding: 0;
-
 }
 :host ::ng-deep.p-dropdown {
-  width: 100% !important;
-  height: 28px !important;
-}
-.p-dropdown {
-  font-size: 26px !important;
-}
-.error {
-  color: red;
-  font-size: 12px;
+  width: 99% !important;
+  height: 30px !important;
 }
 
 table {
@@ -31,18 +23,31 @@ table {
 td {
   width: 17%;
   height: 17%;
-  padding: 1px; /* Ajusta el padding según tus necesidades */
+  padding: 1px;
   margin: 1px;
-  border: 0.2px solid #ddd; /* Añade un borde para mejor visualización */
-  text-align: center; /* Centra el texto */
-}
-
-th {
-  background-color: #afc8f7; /* Color de fondo para los encabezados */
-  padding: 5px; /* Padding para los encabezados */
   border: 0.2px solid #ddd;
   text-align: center;
 }
+
+th {
+  background-color: #afc8f7;
+  padding: 5px;
+  border: 0.2px solid #ddd;
+  text-align: center;
+}
+
 .card {
   padding: 1rem;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+}
+
+.error-border {
+  border: 2px solid red;
 }

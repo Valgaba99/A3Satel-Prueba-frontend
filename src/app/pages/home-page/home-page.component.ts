@@ -2,9 +2,8 @@ import { Task } from './../../model/task';
 
 import { TaskService } from './../../service/taskservice';
 import { StatetaskService } from './../../service/statetaskservice';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
@@ -15,7 +14,7 @@ import { MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
 import { Statetask } from '../../model/statetask';
 import { Router } from '@angular/router';
-import { error } from 'console';
+import { InputTextModule } from 'primeng/inputtext';
 
 interface Asignado {
   id?: number;
@@ -34,16 +33,20 @@ export interface Estado {
   imports: [
     CommonModule,
     ButtonModule,
+    InputTextModule,
     DialogModule,
     EditorModule,
     TableModule,
     ToastModule,
     DropdownModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [TaskService, StatetaskService, MessageService],
 })
 export class HomePageComponent implements OnInit {
+  @ViewChild('dropdownasignado')
+  dropdownasignado!: ElementRef;
+
   displayDialog: boolean = false;
   submitted: boolean = false;
 
@@ -66,13 +69,13 @@ export class HomePageComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.retrieveTasks();
     this.retrieveStatetasks();
     this.asignados = [
       { id: 1, nombre: 'Alfredo moreno lopez' },
       { id: 2, nombre: 'Emilio garcia lora' },
       { id: 3, nombre: 'Víctor algaba bueno' },
     ];
-    this.retrieveTasks();
   }
 
   // Obtener todas las tareas de la API y insertar en la tabla
@@ -102,20 +105,21 @@ export class HomePageComponent implements OnInit {
     this.displayDialog = true;
   }
 
+  // Verifica si vamos a crear o editar una tarea
   onSubmit() {
     if (this.currentTask && this.currentTask.id) {
-      console.log("si ID");
       this.editTask();
     } else {
-      console.log("no ID");
       this.saveaddTask();
     }
   }
 
   // Insertar registro en base de dato
   saveaddTask(): void {
-    if (!this.selectasignado || !this.selectestado) {
-      console.error('Asignado a o Estado no están definidos');
+    if (!this.selectasignado || !this.selectestado || !this.currentTask.nombre || !this.currentTask.descripcion) {
+      //console.error('Algun campo esta en blanco');
+      console.log(this.dropdownasignado.nativeElement)
+      this.dropdownasignado.nativeElement.classList.add('error-border');
       return;
     }
     const nombreEstado =
@@ -170,8 +174,8 @@ export class HomePageComponent implements OnInit {
   loadForm(id: number): void {
     this.router.navigate([], {
       queryParams: { id: id },
-      queryParamsHandling: 'merge', // mantiene otros parámetros de la URL
-      skipLocationChange: false // actualiza la URL
+      queryParamsHandling: 'merge',
+      skipLocationChange: false
     });
     const selectTask = this.alltasks.find((p) => p.id === id);
     if (selectTask) {
@@ -183,7 +187,6 @@ export class HomePageComponent implements OnInit {
       this.selectasignado = selectTask.asignadoa;
       this.selectestado = selectTask.estado;
       this.displayDialog = true;
-      console.log(this.currentTask);
     } else {
       console.error('Task not found');
     }
@@ -204,21 +207,18 @@ export class HomePageComponent implements OnInit {
         : this.selectasignado?.nombre;
 
     const updatedTask = {
-      //id: this.currentTask.id,
       nombre: this.currentTask.nombre,
       asignadoa: nombreAsignado,
       estado: nombreEstado,
       descripcion: this.currentTask.descripcion,
     };
 
-    console.log(updatedTask);
-
     this.taskService.update(this.currentTask.id!, updatedTask).subscribe({
-      next: (response) => {
-        console.log('Task updated successfully', response);
+      next: () => {
         this.displayDialog = false;
         this.resetTask()
         this.retrieveTasks()
+        this.router.navigate(['home'])
       },
       error: (error) => {
         console.error('Error updating task', error);
@@ -226,11 +226,12 @@ export class HomePageComponent implements OnInit {
     });
   }
 
-  // Limpiar campos de formulario
+  // Limpiar campos de formulario y redirigue a pagina principal
   resetTask(): void {
     this.selectasignado = '';
     this.selectestado = '';
     this.currentTask.nombre = '';
     this.currentTask.descripcion = '';
+    this.router.navigate(['home'])
   }
 }
